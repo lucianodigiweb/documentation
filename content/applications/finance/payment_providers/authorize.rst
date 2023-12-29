@@ -66,9 +66,6 @@ previously configured Authorize.Net payment provider on Odoo by going to :menuse
 (:guilabel:`⛭`) and select :guilabel:`Duplicate`. Change the provider's name to differentiate both
 versions (e.g., `Authorize.net - Banks`).
 
-Open the :guilabel:`Configuration` tab, set the :guilabel:`Allow Payments From` field to
-:guilabel:`Bank Account (USA only)`.
-
 When ready, change the provider's :guilabel:`State` to :guilabel:`Enabled` for a regular account or
 :guilabel:`Test Mode` for a sandbox account.
 
