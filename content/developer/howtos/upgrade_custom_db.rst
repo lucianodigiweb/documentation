@@ -1,6 +1,16 @@
+:show-content:
+
 =============================
 Upgrade a customized database
 =============================
+
+
+.. toctree::
+  :titlesonly:
+  :glob:
+
+  upgrade/*
+
 
 Upgrading to a new version of Odoo can be challenging, especially if the database you work on
 contains custom modules. This page intent is to explain the technical process of upgrading a
@@ -190,23 +200,52 @@ To make sure the custom code is working flawlessly in the new version, follow th
 Migrate the data
 ----------------
 
-During the upgrade of the custom modules, you might have to use migration scripts to reflect changes
-from the source code to their corresponding data.
+During the upgrade of the custom modules, you might have to use :doc:`upgrade/migration_scripts` to
+reflect changes from the source code to their corresponding data. Together with the Migration
+scripts, you can also make use of the :doc:`upgrade/upgrade_util` and its helper functions.
 
 - Any technical data that was renamed during the upgrade of the custom code (models, fields,
   external identifiers) should be renamed using migration scripts to avoid data loss during the
-  module upgrade.
+  module upgrade. See also: :ref:`util.rename_field <upgrade/util/rename_field>`,
+  :ref:`util.rename_model <upgrade/util/rename_model>`, :ref:`util.rename_xmlid
+  <upgrade/util/rename_xmlid>`.
 - Data from standard models removed from the source code of the newer Odoo version and from the
   database during the standard upgrade process might need to be recovered from the old model table
   if it is still present.
+
+   .. example::
+      Custom fields for model ``sale.subscription`` are not automatically migrated from Odoo 15 to
+      Odoo 16 (when the model was merged into ``sale.order``). In this case, a SQL query can be
+      executed on a migration script to move the data from one table to the other. Take into account
+      that all columns/fields must already exist, so consider doing this in a ``post-`` script (See
+      :ref:`upgrade/migration-scripts/phases`).
+
+      .. spoiler::
+
+         .. code-block:: python
+
+            def migrate(cr, version):
+               cr.execute(
+                  """
+                  UPDATE sale_order so
+                     SET custom_field = ss.custom_field
+                    FROM sale_subscription ss
+                   WHERE ss.new_sale_order_id = so.id
+                  """
+               )
+
+         Check  the documentation for more information on :doc:`upgrade/migration_scripts`.
 
 Migration scripts can also be used to:
 
 - Ease the processing time of an upgrade. For example, to store the value of computed stored fields
   on models with an excessive number of records by using SQL queries.
-- Recompute fields in case the computation of their value has changed.
-- Uninstall unwanted custom modules.
+- Recompute fields in case the computation of their value has changed. See also:
+  :ref:`util.recompute_fields <upgrade/util/recompute_fields>`.
+- Uninstall unwanted custom modules. See also: :ref:`util.remove_module
+  <upgrade/util/remove_module>`.
 - Correct faulty data or wrong configurations.
+
 
 .. _upgrade_custom/upgraded_database/test_custom:
 
@@ -226,7 +265,8 @@ Things to pay attention to:
 - :doc:`Module data <../tutorials/define_module_data>` not updated: Custom records that have the
   ``noupdate`` flag are not updated when upgrading the module in the new database. For the custom
   data that needs to be updated due to changes in the new version, we recommend to use migration
-  scripts to do so.
+  scripts to do so. See also: :ref:`util.update_record_from_xml
+  <upgrade/util/update_record_from_xml>`.
 
 
 .. _upgrade_custom/testing_rehearsal:
