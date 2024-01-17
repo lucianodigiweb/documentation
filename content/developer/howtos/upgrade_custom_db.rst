@@ -200,12 +200,12 @@ To make sure the custom code is working flawlessly in the new version, follow th
 Migrate the data
 ----------------
 
-During the upgrade of the custom modules, you might have to use :doc:`upgrade/migration_scripts` to
-reflect changes from the source code to their corresponding data. Together with the Migration
+During the upgrade of the custom modules, you might have to use :doc:`upgrade/upgrade_scripts` to
+reflect changes from the source code to their corresponding data. Together with the Upgrade
 scripts, you can also make use of the :doc:`upgrade/upgrade_util` and its helper functions.
 
 - Any technical data that was renamed during the upgrade of the custom code (models, fields,
-  external identifiers) should be renamed using migration scripts to avoid data loss during the
+  external identifiers) should be renamed using upgrade scripts to avoid data loss during the
   module upgrade. See also: :ref:`util.rename_field <upgrade/util/rename_field>`,
   :ref:`util.rename_model <upgrade/util/rename_model>`, :ref:`util.rename_xmlid
   <upgrade/util/rename_xmlid>`.
@@ -216,9 +216,9 @@ scripts, you can also make use of the :doc:`upgrade/upgrade_util` and its helper
    .. example::
       Custom fields for model ``sale.subscription`` are not automatically migrated from Odoo 15 to
       Odoo 16 (when the model was merged into ``sale.order``). In this case, a SQL query can be
-      executed on a migration script to move the data from one table to the other. Take into account
+      executed on an upgrade script to move the data from one table to the other. Take into account
       that all columns/fields must already exist, so consider doing this in a ``post-`` script (See
-      :ref:`upgrade/migration-scripts/phases`).
+      :ref:`upgrade/upgrade-scripts/phases`).
 
       .. spoiler::
 
@@ -234,9 +234,9 @@ scripts, you can also make use of the :doc:`upgrade/upgrade_util` and its helper
                   """
                )
 
-         Check  the documentation for more information on :doc:`upgrade/migration_scripts`.
+         Check the documentation for more information on :doc:`upgrade/upgrade_scripts`.
 
-Migration scripts can also be used to:
+Upgrade scripts can also be used to:
 
 - Ease the processing time of an upgrade. For example, to store the value of computed stored fields
   on models with an excessive number of records by using SQL queries.
@@ -261,10 +261,10 @@ Things to pay attention to:
 - Views not working: During the upgrade, if a view causes issues because of its content, it gets
   disabled. You can find the information on disabled views on the :ref:`Upgrade report
   <upgrade/upgrade_report>`. This view needs to be activated again. To achieve this, we recommend
-  the use of migration scripts.
+  the use of upgrade scripts.
 - :doc:`Module data <../tutorials/define_module_data>` not updated: Custom records that have the
   ``noupdate`` flag are not updated when upgrading the module in the new database. For the custom
-  data that needs to be updated due to changes in the new version, we recommend to use migration
+  data that needs to be updated due to changes in the new version, we recommend to use upgrade
   scripts to do so. See also: :ref:`util.update_record_from_xml
   <upgrade/util/update_record_from_xml>`.
 

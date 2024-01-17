@@ -4,7 +4,7 @@ Upgrade Util package
 
 The `Upgrade Util package <https://github.com/odoo/upgrade-util/>`_ is a library that contains
 helper functions to facilitate the writing of upgrade scripts. This package, used by Odoo for the
-migration scripts of standard modules, provides reliability and helps speed up the upgrade process:
+upgrade scripts of standard modules, provides reliability and helps speed up the upgrade process:
 
 - The helper functions make sure the data is consitent in the database.
 - It takes care of indirect references of the updated records.
@@ -36,12 +36,12 @@ the custom repository. For this, add the following line inside the file::
 Using the Util package
 ======================
 
-Once installed, the following packages are available for the migration scripts:
+Once installed, the following packages are available for the upgrade scripts:
 
 - :file:`odoo.upgrade.util`: the helper themself.
 - :file:`odoo.upgrade.testing`: base TestCase classes.
 
-To use it in migration scripts, simply import it:
+To use it in upgrade scripts, simply import it:
 
 .. code-block:: python
 
@@ -63,7 +63,7 @@ helper functions.
 
 .. note::
    All util functions receive :file:`cr` as a parameter. This refers to the database cursor. Use the
-   one received as a parameter in the :doc:`migration_scripts`.
+   one received as a parameter in the :doc:`upgrade_scripts`.
 
 Fields
 ------
@@ -277,7 +277,7 @@ Records
 .. _upgrade/util/update_record_from_xml:
 
 .. `[source] <https://github.com/odoo/upgrade-util/blob/master/src/util/records.py#L720>`_
-.. method:: update_record_from_xml(cr, xmlid[, reset_write_metadata=True][, force_create=False][, from_module=None][, reset_translations=()])
+.. method:: update_record_from_xml(cr, xmlid[, reset_write_metadata=True][, force_create=True][, from_module=None][, reset_translations=()])
 
    Update a record based on its definition on the :doc:`../../reference/backend/data`. Useful to
    update ``noupdate`` records, in order to reset them for the upgraded version.
@@ -286,7 +286,7 @@ Records
    :param bool reset_write_metadata: if ``True``, the metadata before the record update is kept
       (default: ``True``)
    :param bool force_create: if ``True``, creates the record if it does not exist. (default:
-      ``False``)
+      ``True``)
    :param str from_module: name of the module from which to update the record. Useful when the
       record is rewritten in another module.
    :param set of str reset_translations: set of field names whose translations get reset.
